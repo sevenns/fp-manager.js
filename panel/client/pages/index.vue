@@ -34,6 +34,12 @@ v-container.pl-0.pr-0(grid-list-xl)
 import axios from '~/plugins/axios'
 
 export default {
+  async asyncData () {
+    const projects = await axios.get('/api/projects')
+
+    console.log(projects)
+  },
+
   data () {
     return {
       isStarting: false
@@ -45,7 +51,7 @@ export default {
       this.isStarting = true
 
       const process = await axios.post('/api/projects/start', {
-        uid: 'test'
+        uid: 'frontend-webpack-build-2.6.0'
       })
 
       console.log(process)
@@ -57,7 +63,7 @@ export default {
       this.isStarting = true
 
       const process = await axios.post('/api/projects/stop', {
-        uid: 'test'
+        uid: 'frontend-webpack-build-2.6.0'
       })
 
       console.log(process)
@@ -73,7 +79,7 @@ export default {
 
     async flush () {
       const logs = await axios.post('/api/projects/flush', {
-        uid: 'test'
+        uid: 'frontend-webpack-build-2.6.0'
       })
 
       console.log(logs)
