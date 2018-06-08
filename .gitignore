@@ -1,0 +1,14 @@
+/**/.DS_Store
+panel/node_modules
+panel/package-lock.json
+
+panel/app
+panel/db/data/**/*
+panel/db/logs/**/*
+!panel/db/data/.gitkeep
+!panel/db/logs/.gitkeep
+
+logs/**/*
+projects/**/*
+!logs/.gitkeep
+!projects/.gitkeep

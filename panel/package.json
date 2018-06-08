@@ -1,0 +1,77 @@
+{
+  "name": "frontend-projects-manager",
+  "version": "0.0.1-alpha",
+  "description": "Manager for your frontend projects",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sevenns/fpm.js.git"
+  },
+  "keywords": [
+    "fpm",
+    "fpm.js",
+    "frontend",
+    "projects",
+    "manager"
+  ],
+  "author": "alexander sevenns",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sevenns/fpm.js/issues"
+  },
+  "homepage": "https://github.com/sevenns/fpm.js#readme",
+  "scripts": {
+    "dev": "node ./bin/dev.js",
+    "build": "node ./bin/build.js",
+    "start": "node ./bin/start.js",
+    "clean": "node ./bin/clean.js",
+    "icons": "node ./bin/icons.js",
+    "db:start": "node ./bin/db-start.js",
+    "db:stop": "node ./bin/db-stop.js"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "executive": "^1.5.13",
+    "koa": "^2.5.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-mongo": "^1.3.0",
+    "koa-mount": "^3.0.0",
+    "koa-static": "^4.0.3",
+    "koa-trie-router": "^2.1.6",
+    "moment": "^2.22.2",
+    "pm2": "^2.10.4",
+    "sanitize.css": "^5.0.0",
+    "vue-svgicon": "^2.1.3",
+    "vuetify": "^1.0.18",
+    "xterm": "^3.4.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^8.6.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-backpack": "^0.7.0",
+    "chalk": "^2.4.1",
+    "clear": "^0.1.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-vue": "^4.5.0",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "node-sass": "^4.9.0",
+    "nodemon": "^1.17.5",
+    "nuxt": "^1.4.0",
+    "ora": "^2.1.0",
+    "pug": "^2.0.3",
+    "pug-loader": "^2.4.0",
+    "ramda": "^0.25.0",
+    "raw-loader": "^0.5.1",
+    "sass-lint": "^1.12.1",
+    "sass-loader": "^7.0.2",
+    "vue-loader": "13.7.2",
+    "web-terminal": "^0.7.0",
+    "webpack": "^3.12.0",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
