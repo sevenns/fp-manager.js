@@ -27,6 +27,11 @@ module.exports = {
   link: [
     {
       rel: 'stylesheet',
+      type: 'text/css',
+      href: 'https://fonts.googleapis.com/css?family=Material+Icons'
+    },
+    {
+      rel: 'stylesheet',
       /* eslint-disable-next-line */
       href: 'http://cdn.materialdesignicons.com/2.4.85/css/materialdesignicons.min.css'
     },

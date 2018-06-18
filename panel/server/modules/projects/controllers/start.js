@@ -5,20 +5,20 @@ const { resolve } = require('path')
 const { paths } = config
 
 module.exports = async (context) => {
-  const { uid } = context.request.body
+  const { name, port } = context.request.body.project
   const project = {
-    uid,
-    path: resolve(paths.projects, uid),
-    script: resolve(paths.projects, `${uid}/bin/dev.js`),
-    logs: resolve(paths.logs, `${uid}.log`)
+    uid: name,
+    path: resolve(paths.projects, name),
+    script: resolve(paths.projects, `${name}/bin/dev.js`),
+    logs: resolve(paths.logs, `${name}.log`)
   }
 
   const result = await start(project.script, {
-    name: uid,
+    name,
     cwd: project.path,
     env: {
       NODE_ENV: 'development',
-      PORT: 8081
+      PORT: port
     },
     mergeLogs: true,
     output: project.logs,

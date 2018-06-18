@@ -4,7 +4,7 @@ const controller = require('../controllers/index')
 const router = new Router()
 
 module.exports = () => {
-  router.post('/', async (context) => {
+  router.get('/', async (context) => {
     let result
 
     try {

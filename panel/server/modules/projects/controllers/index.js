@@ -1,16 +1,20 @@
-const { readdirSync } = require('fs')
+const { lstatSync, readdirSync } = require('fs')
 const config = require('../../../../config/fpm')
+const { join } = require('path')
 
 const { paths } = config
 
 module.exports = async () => {
-  const dirs = []
-
-  readdirSync(paths.projects).map((name) => {
-    dirs.push(name)
-
-    return name
+  const dirs = readdirSync(paths.projects).map((name) => {
+    return {
+      name,
+      path: join(paths.projects, name)
+    }
   })
 
-  return dirs
+  return dirs.filter(isDirectory)
+}
+
+function isDirectory (source) {
+  return lstatSync(source.path).isDirectory()
 }
