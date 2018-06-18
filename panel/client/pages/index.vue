@@ -1,47 +1,51 @@
 <template lang='pug'>
 
-v-container.pl-0.pr-0(grid-list-xl)
-  v-layout(row, wrap)
-    v-flex(xs12, md6)
-      h1 Frontend projects manager
+v-container(grid-list-xl)
+  v-layout
+    v-flex(xs6)
+      v-card
+        v-card-text
+          v-select(
+            :items='projects',
+            v-model='project.name'
+            label='Project',
+            item-text='name',
+            item-value='name',
+            color='light-green'
+          )
 
-  v-layout(row, wrap)
-    v-flex(xs12, md6)
-      v-select(
-        :items='projects',
-        v-model='project.name'
-        label='Select project',
-        item-text='name',
-        item-value='name'
-      )
+          v-select(
+            :items='ports',
+            v-model='project.port'
+            :disabled='!project.name',
+            label='Port',
+            color='light-green'
+          )
 
-      div(v-if='project.name')
-        v-select(
-          :items='ports',
-          v-model='project.port'
-          label='Select port'
-        )
+        v-card-actions
+          v-btn(
+            outline,
+            @click='list',
+            color='light-green'
+          ) Get list
 
-  v-layout(row, wrap)
-    v-flex(xs12, md6)
-      v-btn(
-        depressed,
-        @click='start',
-        :loading='isStarting',
-        :disabled='!project'
-      ) Start test server
+          v-spacer
 
-      v-btn(
-        depressed,
-        @click='stop',
-        :loading='isStarting',
-        :disabled='!project'
-      ) Stop
+          v-btn(
+            outline,
+            @click='stop',
+            :loading='isStarting',
+            :disabled='!project.name',
+            color='light-green'
+          ) Stop
 
-      v-btn(
-        depressed,
-        @click='list'
-      ) Get list
+          v-btn(
+            outline,
+            @click='start',
+            :loading='isStarting',
+            :disabled='!project.name',
+            color='light-green'
+          ) Start server
 
 </template>
 

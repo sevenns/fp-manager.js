@@ -1,6 +1,6 @@
 {
   "name": "frontend-projects-manager",
-  "version": "0.0.2-alpha",
+  "version": "0.0.3-alpha",
   "description": "Manager for your frontend projects",
   "private": true,
   "repository": {
