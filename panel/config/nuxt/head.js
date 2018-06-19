@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Nuxt MongoDB client app',
+  title: 'Frontend projects manager',
   meta: [
     { charset: 'utf-8' },
     {

@@ -30,6 +30,7 @@ app.use((context) => {
   context.status = 200
 
   return new Promise((resolve, reject) => {
+    context.req.session = context.session
     context.res.on('close', resolve)
     context.res.on('finish', resolve)
 

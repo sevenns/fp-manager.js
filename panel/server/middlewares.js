@@ -1,11 +1,15 @@
 const serve = require('koa-static')
-const mongo = require('koa-mongo')
 const mount = require('koa-mount')
 const bodyParser = require('koa-bodyparser')
+const passport = require('koa-passport')
+const LocalStrategy = require('passport-local')
+const JwtStrategy = require('passport-jwt').Strategy
+const { ExtractJwt } = require('passport-jwt')
+const mongoose = require('mongoose')
+const User = require('./models/user')
 const routes = require('./routes')
-const database = require('./database')
 const config = require('../config/server')
-const mongoConfig = require('../config/mongo')
+const mongo = require('../config/mongo')
 
 module.exports = (app) => {
   app.use(async (context, next) => {
@@ -25,9 +29,49 @@ module.exports = (app) => {
     }
   })
 
-  app.use(mongo(mongoConfig))
-  app.use(database)
-  app.use(bodyParser())
   app.use(serve(config.static))
-  app.use(mount('/api', routes()))
+  app.use(bodyParser())
+  app.use(passport.initialize())
+  app.use(mount('/api/v1', routes()))
+
+  mongoose.Promise = Promise
+  mongoose.set('debug', true)
+  mongoose.connect(`mongodb://${mongo.host}:${mongo.port}/${mongo.db}`)
+
+  passport.use(new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+    session: false
+  }, (username, password, done) => {
+    User.findOne({ username }, (err, user) => {
+      // console.log(password)
+      // console.log(user.checkPassword(password))
+      if (err) {
+        return done(err)
+      }
+
+      if (!user || !user.checkPassword(password)) {
+        return done(null, false)
+      }
+
+      return done(null, user)
+    })
+  }))
+
+  const jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
+    secretOrKey: config.jwtsecret
+  }
+
+  passport.use(new JwtStrategy(jwtOptions, (payload, done) => {
+    User.findById(payload.id, (err, user) => {
+      if (err) return done(err)
+
+      if (user) {
+        done(null, user)
+      } else {
+        done(null, false)
+      }
+    })
+  }))
 }

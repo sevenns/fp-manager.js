@@ -1,109 +1,86 @@
 <template lang='pug'>
 
-v-container(grid-list-xl)
-  v-layout
-    v-flex(xs6)
-      v-card
-        v-card-text
-          v-select(
-            :items='projects',
-            v-model='project.name'
-            label='Project',
-            item-text='name',
-            item-value='name',
-            color='light-green'
-          )
+v-flex(xs4)
+  v-card
+    v-card-title
+      .headline Sign in
+      v-spacer
+      v-btn(
+        icon,
+        dark,
+        color='light-green',
+        @click='signin',
+        :disabled='!valid || !username || !password'
+      )
+        v-icon mdi-login
 
-          v-select(
-            :items='ports',
-            v-model='project.port'
-            :disabled='!project.name',
-            label='Port',
-            color='light-green'
-          )
+    v-card-text
+      v-form(
+        v-model='valid',
+        ref='form',
+        lazy-validation,
+        @keyup.native.enter='signin'
+      )
+        v-text-field(
+          label='Username',
+          v-model='username',
+          color='light-green',
+          required, :rules='rules.username'
+        )
 
-        v-card-actions
-          v-btn(
-            outline,
-            @click='list',
-            color='light-green'
-          ) Get list
-
-          v-spacer
-
-          v-btn(
-            outline,
-            @click='stop',
-            :loading='isStarting',
-            :disabled='!project.name',
-            color='light-green'
-          ) Stop
-
-          v-btn(
-            outline,
-            @click='start',
-            :loading='isStarting',
-            :disabled='!project.name',
-            color='light-green'
-          ) Start server
+        v-text-field(
+          label='Password', hint='At least 6 characters',
+          v-model='password', min='6', maxlength='20',
+          :append-icon="passwordHidden ? 'visibility' : 'visibility_off'",
+          :append-icon-cb='() => (passwordHidden = !passwordHidden)',
+          :type="passwordHidden ? 'password' : 'text'",
+          counter='20', required,
+          :rules='rules.password',
+          color='light-green'
+        )
 
 </template>
 
 <script>
 
-import axios from '~/plugins/axios'
-
 export default {
-  async asyncData () {
-    const projects = await axios.get('/api/projects')
-
-    return {
-      projects: projects.data
-    }
-  },
+  layout: 'centered',
 
   data () {
     return {
-      ports: [3000, 3001, 3002],
+      username: '',
+      password: '',
 
-      isStarting: false,
-
-      project: {
-        name: '',
-        port: ''
+      isLoading: false,
+      valid: true,
+      passwordHidden: true,
+      rules: {
+        username: [
+          v => !!v || 'Username is required',
+          v => /\w{4,16}/.test(v) || 'Username must be valid'
+        ],
+        password: [
+          v => !!v || 'Password is required',
+          v => (v && v.length >= 6) || 'Password must be at least 6 characters'
+        ]
       }
     }
   },
 
   methods: {
-    async start () {
-      if (this.project.name) {
-        this.isStarting = true
-
-        await axios.post('/api/projects/start', {
-          project: this.project
+    async signin () {
+      if (this.$refs.form.validate()) {
+        const data = await this.$store.dispatch('user/signin', {
+          username: this.username,
+          password: this.password
         })
 
-        this.isStarting = false
+        console.log(data)
+
+        // if (uuid) {
+        //   this.$router.push('/control')
+        // }
       }
-    },
-
-    async stop () {
-      if (this.project.name) {
-        this.isStarting = true
-
-        await axios.post('/api/projects/stop', {
-          name: this.project.name
-        })
-
-        this.isStarting = false
-      }
-    },
-
-    async list () {
-      const process = await axios.get('/api/projects/list')
-
-      console.log(process)
     }
   }
 }

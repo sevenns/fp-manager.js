@@ -12,8 +12,7 @@ module.exports = {
   },
 
   vendor: [
-    '~/plugins/axios',
-    'xterm'
+    '~/plugins/axios'
   ],
 
   extend (config, { isDev, isClient }) {

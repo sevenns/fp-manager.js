@@ -4,7 +4,7 @@ const { join } = require('path')
 
 const { paths } = config
 
-module.exports = async () => {
+module.exports = async (context) => {
   const dirs = readdirSync(paths.projects).map((name) => {
     return {
       name,
