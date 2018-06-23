@@ -1,35 +1,46 @@
-const LocalStrategy = require('passport-local').Strategy
+const localAuth = require('passport-local')
+const jwtAuth = require('passport-jwt')
 
-module.exports = async (passport) => {
-  passport.serializeUser((user, done) => {
-    done(null, user.id)
-  })
+const User = require('./models/user')
+const { jwtsecret } = require('../config/server')
 
-  passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await fetchUser()
-      done(null, user)
-    } catch (error) {
-      done(error)
-    }
-  })
+const LocalStrategy = localAuth.Strategy
+const JwtStrategy = jwtAuth.Strategy
+const { ExtractJwt } = jwtAuth
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('User'),
+  secretOrKey: jwtsecret
+}
 
-  passport.use(new LocalStrategy(async (username, password, done) => {
-    await fetchUser().then((user) => {
-      if (username === user.username && password === user.password) {
+
+module.exports = (passport) => {
+  passport.use(new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+    session: false
+  }, (username, password, done) => {
+    User.findOne({ username }, (error, user) => {
+      if (error) {
+        return done(error)
+      }
+
+      if (!user || !user.checkPassword(password)) {
+        return done(null, false)
+      }
+
+      return done(null, user)
+    })
+  }))
+
+  passport.use(new JwtStrategy(jwtOptions, (payload, done) => {
+    User.findById(payload.id, (error, user) => {
+      if (error) return done(error)
+
+      if (user) {
         done(null, user)
       } else {
         done(null, false)
       }
-    }).catch(error => done(error))
+    })
   }))
-}
-
-async function fetchUser () {
-  // const userFromDb = await db.collection('users').findOne({ username, password })
-  const user = { id: 827584375893, username: 'test', password: 'test' }
-
-  // console.log(userFromDb)
-
-  return user
 }

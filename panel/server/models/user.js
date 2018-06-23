@@ -9,29 +9,36 @@ const schema = new mongoose.Schema({
   timestamps: true
 })
 
-schema.virtual('password').set((password) => {
+schema.virtual('password').set(function (password) {
   this._plainPassword = password
 
   if (password) {
-    this.salt = crypto.randomBytes(128).toString('base64')
-    this.passwordHash = crypto.pbkdf2Sync(password, this.salt, 1, 128, 'sha1')
+    this.salt = crypto.randomBytes(16).toString('base64')
+    this.passwordHash = crypto.pbkdf2Sync(
+      password,
+      this.salt,
+      872791,
+      32,
+      'sha1'
+    ).toString('base64')
   } else {
     this.salt = undefined
     this.passwordHash = undefined
   }
-}).get(() => {
+}).get(function () {
   return this._plainPassword
 })
 
-schema.methods.checkPassword = (password) => {
-  console.log(this.passwordHash)
+schema.methods.checkPassword = function (password) {
   if (!password || !this.passwordHash) return false
 
-  const passwordHash = crypto.pbkdf2Sync(password, this.salt, 1, 128, 'sha1')
-
-  console.log(passwordHash)
-  console.log(this.passwordHash)
-  console.log(passwordHash === this.passwordHash)
+  const passwordHash = crypto.pbkdf2Sync(
+    password,
+    this.salt,
+    872791,
+    32,
+    'sha1'
+  ).toString('base64')
 
   return passwordHash === this.passwordHash
 }

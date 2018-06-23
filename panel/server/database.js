@@ -1,7 +1,9 @@
-const config = require('../config/mongo')
+const mongoose = require('mongoose')
 
-module.exports = async (context, next) => {
-  context.db = context.mongo.db(config.db)
+const mongo = require('../config/mongo')
 
-  await next()
+module.exports = async () => {
+  mongoose.Promise = Promise
+  mongoose.set('debug', true)
+  mongoose.connect(`mongodb://${mongo.host}:${mongo.port}/${mongo.db}`)
 }

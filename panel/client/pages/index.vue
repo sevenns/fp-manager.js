@@ -6,10 +6,12 @@ v-flex(xs4)
       .headline Sign in
       v-spacer
       v-btn(
-        icon,
-        dark,
+        fab,
+        outline,
         color='light-green',
         @click='signin',
+        :loading='isLoading',
+        :flat='!valid || !username || !password',
         :disabled='!valid || !username || !password'
       )
         v-icon mdi-login
@@ -43,6 +45,8 @@ v-flex(xs4)
 
 <script>
 
+import { mapGetters } from 'vuex'
+
 export default {
   layout: 'centered',
 
@@ -67,19 +71,29 @@ export default {
     }
   },
 
+  computed: mapGetters({ user: 'user/GET' }),
+
   methods: {
     async signin () {
       if (this.$refs.form.validate()) {
-        const data = await this.$store.dispatch('user/signin', {
-          username: this.username,
-          password: this.password
-        })
+        let result = null
 
-        console.log(data)
+        this.isLoading = true
 
-        // if (uuid) {
-        //   this.$router.push('/control')
-        // }
+        try {
+          result = await this.$store.dispatch('user/signin', {
+            username: this.username,
+            password: this.password
+          })
+        } catch (error) {
+          console.error(error)
+        } finally {
+          this.isLoading = false
+        }
+
+        if (result) {
+          this.$router.push('/dashboard')
+        }
       }
     }
   }

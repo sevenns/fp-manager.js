@@ -5,6 +5,7 @@ const build = require('./build')
 const css = require('./css')
 const env = require('./env')
 const plugins = require('./plugins')
+const router = require('./router')
 
 const preloader = resolve(paths.client, 'components/Preloader.vue')
 
@@ -14,6 +15,7 @@ module.exports = {
   css,
   env,
   plugins,
+  router,
 
   srcDir: paths.client,
   buildDir: paths.app,

@@ -38,6 +38,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-mount": "^3.0.0",
     "koa-passport": "^4.1.0",
+    "koa-session": "^5.8.1",
     "koa-static": "^4.0.3",
     "koa-trie-router": "^2.1.6",
     "moment": "^2.22.2",

@@ -1,14 +1,15 @@
-// import axios from '~/plugins/axios'
-
 export const actions = {
-  // async nuxtServerInit ({ commit }, { req }) {
-  //   const { user } = req.session.passport
+  async nuxtServerInit ({ commit }, { req }) {
+    const { token, username } = req.session
 
-  //   if (false) {
-  //     const user = await axios.post('/api/v1/user/get', { user })
+    if (token && username) {
+      commit('user/SET', { token, username })
+    }
+  },
 
-  //     commit('user/SET', user.data)
-  //   }
-  // }
+  nuxtClientInit (store, context) {
+    console.log(store)
+    console.log(context)
+  }
 }
 

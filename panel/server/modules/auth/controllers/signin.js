@@ -8,20 +8,26 @@ module.exports = async (context, next) => {
   await passport.authenticate('local', (error, user) => {
     if (error) {
       result = error
+      throw new Error(error)
     }
-
-    // console.log(user)
 
     if (user) {
       const token = jwt.sign({
         username: user.username
       }, config.jwtsecret, { expiresIn: '168h' })
 
+      context.session.token = token
+      context.session.username = user.username
+
       result = {
-        username: user.username,
-        token: `JWT ${token}`
+        token,
+        username: user.username
       }
+
+      return
     }
+
+    context.throw(404, 'Username not found or invalid password.')
   })(context, next)
 
   return result
