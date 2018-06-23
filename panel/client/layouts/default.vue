@@ -23,4 +23,3 @@ import '~/assets/icons/dist'
 export default {}
 
 </script>
-

@@ -5,6 +5,7 @@ const { resolve } = require('path')
 const { paths } = config
 
 module.exports = async (context) => {
+  let result = null
   const { name, port } = context.request.body.project
   const project = {
     uid: name,
@@ -13,7 +14,7 @@ module.exports = async (context) => {
     logs: resolve(paths.logs, `${name}.log`)
   }
 
-  const result = await start(project.script, {
+  await start(project.script, {
     name,
     cwd: project.path,
     env: {
@@ -24,6 +25,8 @@ module.exports = async (context) => {
     output: project.logs,
     logDateFormat: 'HH:mm:ss DD.MM.YYYY'
   }, project.logs)
+
+  result = { name, port }
 
   return result
 }

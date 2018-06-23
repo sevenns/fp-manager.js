@@ -12,7 +12,8 @@ module.exports = {
   },
 
   vendor: [
-    '~/plugins/axios'
+    '~/plugins/axios',
+    '~/plugins/toArray'
   ],
 
   extend (config, { isDev, isClient }) {
