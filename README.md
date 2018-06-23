@@ -1,3 +1,10 @@
+<p align="center">
+	<a href="https://github.com/sevenns/fp-manager.js" title="Weery"><img src="./fpm-logo.png" width="128px"></a>
+	<h3 align="center">fp-manager.js</h3>
+</p>
+
+<p align="center">Manager for your frontend work.</p>
+
 ### - Structure
 
 - **logs** (logs all projects)
