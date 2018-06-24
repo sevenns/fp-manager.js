@@ -1,10 +1,10 @@
 const pm2 = require('pm2')
-const config = require('../../../../config/fpm')
 const { resolve } = require('path')
 
-const { paths } = config
+const router = require('../../helpers/router')
+const { paths } = require('../../../config/fpm')
 
-module.exports = async (context) => {
+module.exports = router('/start', 'post', async ({ context }) => {
   let result = null
   const { name, port } = context.request.body.project
   const project = {
@@ -29,7 +29,7 @@ module.exports = async (context) => {
   result = { name, port }
 
   return result
-}
+})
 
 function start (script, options) {
   return new Promise((resolve, reject) => {

@@ -1,14 +1,13 @@
 const Router = require('koa-trie-router')
-const controller = require('../controllers/start')
 
 const router = new Router()
 
-module.exports = () => {
-  router.post('/start', async (context) => {
+module.exports = (path, method, fn) => {
+  router[method](path, async (context, next) => {
     let result
 
     try {
-      result = await controller(context)
+      result = await fn({ context, next })
     } catch (error) {
       context.throw(500, error)
     }

@@ -29,13 +29,8 @@ module.exports = (env) => {
     resolve: {
       extensions: ['.js'],
       alias: {
-        '~': paths.root,
-        '~config': paths.config,
-        '~client': paths.client,
-        '~server': paths.server,
-        '~app': paths.app
-      },
-      modules: [paths.config, 'node_modules']
+        '~': resolve(__dirname, '..')
+      }
     },
 
     performance: {
@@ -50,7 +45,7 @@ module.exports = (env) => {
       rules: [
         {
           test: /\.(js)$/,
-          exclude: [/node_modules/, resolve(paths.root, 'projects')],
+          exclude: [/node_modules/],
           use: [{
             loader: 'babel-loader',
             options: {
@@ -62,7 +57,7 @@ module.exports = (env) => {
 
         {
           test: /\.(js)$/,
-          exclude: [/node_modules/, resolve(paths.root, 'projects')],
+          exclude: [/node_modules/],
           use: [
             {
               loader: 'babel-loader',

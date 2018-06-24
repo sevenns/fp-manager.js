@@ -3,6 +3,6 @@ const { resolve } = require('path')
 
 module.exports = {
   script: resolve(paths.server, 'index.js'),
-  watch: [paths.server],
+  watch: [paths.server, paths.config],
   ext: 'js'
 }

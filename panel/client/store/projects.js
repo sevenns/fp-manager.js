@@ -36,7 +36,7 @@ export const getters = {
 
 export const actions = {
   async fetchDetailed ({ commit }) {
-    const { data } = await axios.get('/api/v1/projects')
+    const { data } = await axios.get('/api/v1/projects/get')
     const dataObject = {}
 
     data.forEach((project) => {
@@ -47,7 +47,7 @@ export const actions = {
   },
 
   async fetchList ({ commit }) {
-    const { data } = await axios.get('/api/v1/projects')
+    const { data } = await axios.get('/api/v1/projects/get')
     const list = {}
 
     data.map((project) => {
@@ -60,7 +60,7 @@ export const actions = {
   },
 
   async fetchLaunched ({ commit }) {
-    const { data } = await axios.get('/api/v1/projects/list')
+    const { data } = await axios.get('/api/v1/projects/launched')
     const launched = {}
 
     data.map((item) => {

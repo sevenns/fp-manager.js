@@ -21,22 +21,15 @@ v-container(grid-list-xl)
           )
 
         v-card-actions
-
-          v-btn(
-            outline,
-            @click='check',
-            color='light-green'
-          ) Check
-
           v-spacer
 
           v-btn(
             outline,
             @click='start',
             :loading='isStarting',
-            :disabled='!project.name',
+            :disabled='!project.name || !project.port',
             color='light-green'
-          ) Start server
+          ) Launch
 
     v-flex(xs8)
       v-card
@@ -145,6 +138,7 @@ export default {
           const deleteId = this.projectsStoped.findIndex(x => x === data.name)
 
           this.projectsStoped.splice(deleteId, 1)
+          this.project = { name: '', port: '' }
         } catch (error) {
           console.error(error)
         } finally {
@@ -156,15 +150,16 @@ export default {
     async stop (name) {
       this.isStopping = true
 
-      await axios.post('/api/v1/projects/stop', { name })
+      try {
+        await axios.post('/api/v1/projects/stop', { name })
 
-      this.isStopping = false
-    },
-
-    async list () {
-      const process = await axios.get('/api/v1/projects/list')
-
-      console.log(process)
+        this.projectsStoped.push(this.projectsLaunched[name].name)
+        delete this.projectsLaunched[name]
+      } catch (error) {
+        console.error(error)
+      } finally {
+        this.isStopping = false
+      }
     },
 
     async check () {

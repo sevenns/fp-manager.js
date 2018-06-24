@@ -1,8 +1,8 @@
 const Router = require('koa-trie-router')
 const mount = require('koa-mount')
 
-const auth = require('./modules/auth')
-const projects = require('./modules/projects')
+const auth = require('./controllers/auth')
+const projects = require('./controllers/projects')
 
 const router = new Router()
 

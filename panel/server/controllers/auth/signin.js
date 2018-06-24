@@ -1,8 +1,9 @@
 const passport = require('koa-passport')
 const jwt = require('jsonwebtoken')
-const config = require('../../../../config/server')
+const router = require('../../helpers/router')
+const config = require('../../../config/server')
 
-module.exports = async (context, next) => {
+module.exports = router('/signin', 'post', async ({ context, next }) => {
   let result = null
 
   await passport.authenticate('local', (error, user) => {
@@ -31,4 +32,4 @@ module.exports = async (context, next) => {
   })(context, next)
 
   return result
-}
+})
