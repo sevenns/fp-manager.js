@@ -1,77 +1,75 @@
 import axios from '~/plugins/axios'
 
 export const state = () => ({
-  detailed: {},
   list: {},
-  launched: {}
+  launched: {},
+  stopped: {}
 })
 
 export const mutations = {
-  SET_DETAILED (state, data) {
-    state.detailed = data
-  },
-
   SET_LIST (state, data) {
     state.list = data
   },
 
   SET_LAUNCHED (state, data) {
     state.launched = data
+  },
+
+  SET_STOPPED (state, data) {
+    state.stopped = data
   }
 }
 
 export const getters = {
-  GET_DETAILED (state) {
-    return state.detailed
-  },
-
   GET_LIST (state) {
     return state.list
   },
 
   GET_LAUNCHED (state) {
     return state.launched
+  },
+
+  GET_STOPPED (state) {
+    return state.stopped
   }
 }
 
 export const actions = {
-  async fetchDetailed ({ commit }) {
-    const { data } = await axios.get('/api/v1/projects/get')
-    const dataObject = {}
-
-    data.forEach((project) => {
-      dataObject[project.name] = project
-    })
-
-    commit('SET_DETAILED', dataObject)
+  async fetchAll ({ dispatch }) {
+    await dispatch('fetchList')
+    await dispatch('fetchLaunched')
+    dispatch('fetchStopped')
   },
 
   async fetchList ({ commit }) {
     const { data } = await axios.get('/api/v1/projects/get')
-    const list = {}
-
-    data.map((project) => {
-      list[project.name] = project
-
-      return project
-    })
+    const list = data.reduce((acc, p) => ({ ...acc, [p.name]: p }), {})
 
     commit('SET_LIST', list)
   },
 
   async fetchLaunched ({ commit }) {
     const { data } = await axios.get('/api/v1/projects/launched')
-    const launched = {}
 
-    data.map((item) => {
-      launched[item.name] = {
-        name: item.name,
-        port: item.pm2_env.PORT
+    const launched = data.reduce((acc, p) => ({
+      ...acc,
+      [p.name]: {
+        name: p.name,
+        port: p.pm2_env.PORT
       }
-
-      return item
-    })
+    }), {})
 
     commit('SET_LAUNCHED', launched)
+  },
+
+  fetchStopped ({ commit, getters }) {
+    const list = Object.values(getters.GET_LIST).map(p => p.name)
+    const launched = Object.values(getters.GET_LAUNCHED).map(p => p.name)
+
+    const stopped = list.filter((project) => {
+      return !launched.includes(project)
+    })
+
+    commit('SET_STOPPED', stopped)
   }
 }

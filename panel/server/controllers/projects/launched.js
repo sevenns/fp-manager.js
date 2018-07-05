@@ -1,7 +1,7 @@
 const pm2 = require('pm2')
 const router = require('../../helpers/router')
 
-module.exports = router('/launched', 'get', async ({ context }) => {
+module.exports = router('/launched', 'get', async () => {
   const launched = await fetchLaunched()
 
   return launched

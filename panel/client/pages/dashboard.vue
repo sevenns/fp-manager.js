@@ -6,7 +6,7 @@ v-container(grid-list-xl)
       v-card
         v-card-text
           v-select(
-            :items='projectsStoped',
+            :items='projectsStopped',
             v-model='project.name'
             label='Project',
             color='light-green'
@@ -77,9 +77,7 @@ export default {
   },
 
   async fetch ({ store }) {
-    await store.dispatch('projects/fetchDetailed')
-    await store.dispatch('projects/fetchList')
-    await store.dispatch('projects/fetchLaunched')
+    await store.dispatch('projects/fetchAll')
   },
 
   data () {
@@ -98,26 +96,10 @@ export default {
 
   computed: {
     ...mapGetters({
-      projects: 'projects/GET_DETAILED',
+      projects: 'projects/GET_LIST',
       projectsLaunched: 'projects/GET_LAUNCHED',
-      projectsList: 'projects/GET_LIST'
-    }),
-
-    projectsStoped () {
-      const stoped = []
-      const projectsListArray = toArray(this.projectsList)
-      const projectsLaunchedArray = toArray(this.projectsLaunched, 'name')
-
-      projectsListArray.map((project) => {
-        if (!projectsLaunchedArray.includes(project.name)) {
-          stoped.push(project.name)
-        }
-
-        return project
-      })
-
-      return stoped
-    }
+      projectsStopped: 'projects/GET_STOPPED'
+    })
   },
 
   methods: {
@@ -135,9 +117,9 @@ export default {
             port: data.port
           }
 
-          const deleteId = this.projectsStoped.findIndex(x => x === data.name)
+          const deleteId = this.projectsStopped.findIndex(x => x === data.name)
 
-          this.projectsStoped.splice(deleteId, 1)
+          this.projectsStopped.splice(deleteId, 1)
           this.project = { name: '', port: '' }
         } catch (error) {
           console.error(error)
@@ -153,7 +135,7 @@ export default {
       try {
         await axios.post('/api/v1/projects/stop', { name })
 
-        this.projectsStoped.push(this.projectsLaunched[name].name)
+        this.projectsStopped.push(this.projectsLaunched[name].name)
         delete this.projectsLaunched[name]
       } catch (error) {
         console.error(error)
